@@ -7,6 +7,8 @@ services:
       POSTGRES_USER: permify
       POSTGRES_PASSWORD: permify
       POSTGRES_DB: permify
+    ports:
+      - "5432:5432"
     volumes:
       - permify-data:/var/lib/postgresql/data
 
