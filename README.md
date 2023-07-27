@@ -1,8 +1,43 @@
-# schemas
+# fn
 
-- entity user {}
+```
+curl -LSs https://raw.githubusercontent.com/fnproject/cli/master/install | sh
 
-- entity group {
+fn start
+
+fn list contexts
+
+fn use context default
+
+// To use Fn for local development, set the registry to an arbitrary value
+fn update context registry fndemouser
+
+//To use Fn for normal development, set the registry to your Docker Hub user name
+fn update context registry your-docker-hub-user-name
+
+```
+
+
+
+
+
+
+
+# postgres
+```
+sudo apt install postgresql
+psql -h localhost -p 5432 -U permify -d permify
+
+```
+
+
+
+# Permify Schemas
+
+```
+entity user {}
+
+entity group {
 
       relation member @user
       relation admin @user
@@ -18,9 +53,9 @@
       action comment_on_post = member
       action view_group_insights = admin or moderator
 
-  }
+}
 
-- entity post {
+entity post {
 
       relation owner @user
       relation group @group
@@ -30,9 +65,9 @@
 
       permission group_member = group.member
 
-  }
+}
 
-- entity comment {
+entity comment {
 
       relation owner @user
       relation post @post
@@ -42,18 +77,18 @@
       action delete_comment = owner
 
 
-  }
+}
 
-- entity like {
+entity like {
 
       relation owner @user
       relation post @post
 
       action like_post = owner or post.group_member
       action unlike_post = owner or post.group_member
-  }
+}
 
-- entity poll {
+entity poll {
 
       relation owner @user
       relation group @group
@@ -62,9 +97,9 @@
       action view_poll = owner or group.member
       action edit_poll = owner or group.admin
       action delete_poll = owner or group.admin
-  }
+}
 
-- entity file {
+entity file {
 
       relation owner @user
       relation group @group
@@ -73,9 +108,9 @@
       action upload_file = owner or group.member
       action view_file = owner or group.member
       action delete_file = owner or group.admin
-  }
+}
 
-- entity event {
+entity event {
 
       relation owner @user
       relation group @group
@@ -85,4 +120,7 @@
       action edit_event = owner or group.admin
       action delete_event = owner or group.admin
       action RSVP_to_event = owner or group.member
-  }
+}
+```
+
+

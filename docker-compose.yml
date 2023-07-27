@@ -14,11 +14,10 @@ services:
 
   permify:
     image: permify/permify
-    environment:
-      DATABASE_URL: postgres://permify:permify@database:5432/permify
     ports:
       - "3476:3476"
-    command: "serve"
+      - "3478:3478"
+    command: "serve --database-engine=postgres --database-uri=postgres://permify:permify@database:5432/permify"
     depends_on:
       - database
 
