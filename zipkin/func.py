@@ -5,6 +5,10 @@ from py_zipkin.transport import BaseTransportHandler
 from py_zipkin.transport import BaseTransportHandler
 
 
+
+
+
+
 class HttpTransport(BaseTransportHandler):
 
     def get_max_payload_bytes(self):
@@ -25,8 +29,13 @@ class HttpTransport(BaseTransportHandler):
 some_handler = HttpTransport()
 
 # Define your function that performs some actions
-def do_stuff(a, b):
-    print(a + b)
+def call_fn():
+    response = requests.post(
+            'http://localhost:8080/invoke/01H6F3MV58NG8G00GZJ0000002'
+        )
+    print(response.text)
+
+    
 
 # The function that uses zipkin_span for tracing
 def some_function(a, b):
@@ -37,7 +46,7 @@ def some_function(a, b):
         port=42,
         sample_rate=80.0,  # 80% of the requests will be traced
     ):
-        do_stuff(a, b)
+        call_fn()
 
 # Call the function
 some_function(3, 5)

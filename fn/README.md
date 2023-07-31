@@ -65,7 +65,7 @@ fn invoke pythonapp pythonfn
 // Getting a Function’s Invoke Endpoint
 
 fn inspect function pythonapp pythonfn
-curl -X "POST" -H "Content-Type: application/json" http://localhost:8080/invoke/01DJRP8FT8NG8G00GZJ0000002
+curl -X "POST" -H "Content-Type: application/json" http://localhost:8080/invoke/01H6F3G6SPNG8G00GZJ0000001
 
 ```
 
