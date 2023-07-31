@@ -11,15 +11,35 @@ services:
       - "5432:5432"
     volumes:
       - permify-data:/var/lib/postgresql/data
+    networks:
+      - permify_net
 
   permify:
     image: permify/permify
     ports:
       - "3476:3476"
       - "3478:3478"
-    command: "serve --database-engine=postgres --database-uri=postgres://permify:permify@database:5432/permify"
+    command: "serve --database-engine=postgres --database-uri=postgres://permify:permify@database:5432/permify --tracer-exporter=zipkin --tracer-endpoint=http://zipkin:9411/api/v2/spans --tracer-enabled=true"
     depends_on:
       - database
+      - zipkin
+    networks:
+      - permify_net
+
+  zipkin:
+    hostname: zipkin
+    image: openzipkin/zipkin
+    ports:
+      - "9411:9411"
+    networks:
+      - permify_net
+
+  
+
+  
+
+networks:
+  permify_net:
 
 volumes:
   permify-data:
