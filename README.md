@@ -1,2 +1,7 @@
-# permify-stack
+# Permify Stack
 
+## Tools
+- permify
+- fn
+- zipkin
+- airflow
