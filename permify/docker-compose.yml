@@ -28,28 +28,13 @@ services:
     networks:
     - permify_net
 
-  #cockroachdb:
-    #image: cockroachdb/cockroach:v21.1.10
-    #hostname: cockroachdb
-    #restart: always
-    #ports:
-      #- "26257:26257"
-      #- "8080:8080"
-    #volumes:
-      #- ./cockroach-data:/cockroach/cockroach-data
-    #command: start-single-node --insecure
-
-    #networks:
-        #- permify_net
-
-
 
   permify_1:
     image: permify/permify
     ports:
       - "3476:3476"
       - "3478:3478"
-      #- "6060:6060"
+
     command:
         - "serve"
         - "--database-auto-migrate=true"
@@ -68,6 +53,7 @@ services:
       - database_1
       #- cockroachdb
       - zipkin
+      - serf
     networks:
      - permify_net
 
@@ -76,7 +62,7 @@ services:
     ports:
       - "3477:3476"
       - "3479:3478"
-      #- "6060:6060"
+
     command:
         - "serve"
         - "--database-auto-migrate=true"
