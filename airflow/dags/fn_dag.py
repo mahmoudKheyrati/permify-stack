@@ -16,7 +16,7 @@ default_args = {
     "retry_delay": timedelta(minutes=1),
 }
 
-dag = DAG("fn-dag", default_args=default_args, schedule_interval="*/5 * * * *" , catchup=False );
+dag = DAG("fn-dag", default_args=default_args, schedule_interval="*/1 * * * *" , catchup=False );
 
 fn_create_schema = BashOperator(
     task_id='fn_create_schema',
