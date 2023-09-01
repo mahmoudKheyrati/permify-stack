@@ -27,7 +27,9 @@ services:
     ports:
       - "3476:3476"
       - "3478:3478"
-    command: "serve --database-auto-migrate=true --database-engine=postgres --database-uri=postgres://root:root@cockroachdb:26257/permify --tracer-exporter=zipkin --tracer-endpoint=http://zipkin:9411/api/v2/spans --tracer-enabled=true "
+      - "9898:9898"
+    command: "serve --database-auto-migrate=true --database-engine=postgres --database-uri=postgres://permify:permify@database:5432/permify --tracer-exporter=zipkin --tracer-endpoint=http://zipkin:9411/api/v2/spans --tracer-enabled=true --profiler-enabled=true --profiler-port=9898 "
+    restart: always
     depends_on:
       - database
       - zipkin
