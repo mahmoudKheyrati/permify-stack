@@ -1,47 +1,16 @@
 version: '3'
 
 services:
-  #database:
-    #image: postgres:13-alpine
-    #environment:
-      #POSTGRES_USER: permify
-      #POSTGRES_PASSWORD: permify
-      #POSTGRES_DB: permify
-    #ports:
-      #- "5432:5432"
-    #volumes:
-      #- permify-data:/var/lib/postgresql/data
-    #networks:
-      #- permify_net
-
-  cockroachdb:
-    image: cockroachdb/cockroach:v21.1.10
-    hostname: cockroachdb
-    restart: always
+  database:
+    image: postgres:13-alpine
+    environment:
+      POSTGRES_USER: permify
+      POSTGRES_PASSWORD: permify
+      POSTGRES_DB: permify
     ports:
-      - "26257:26257"
-      - "8080:8080"
+      - "5432:5432"
     volumes:
-      - ./cockroach-data:/cockroach/cockroach-data
-    command: start-single-node --insecure
-
-    networks:
-        - permify_net
-
-
-
-  permify:
-    image: permify/permify
-    ports:
-      - "3476:3476"
-      - "3478:3478"
-    #command: "serve --database-engine=postgres --database-uri=postgres://permify:permify@database:5432/permify --tracer-exporter=zipkin --tracer-endpoint=http://zipkin:9411/api/v2/spans --tracer-enabled=true"
-
-    command: "serve --database-auto-migrate=true --database-engine=postgres --database-uri=postgres://root:root@cockroachdb:26257/permify --tracer-exporter=zipkin --tracer-endpoint=http://zipkin:9411/api/v2/spans --tracer-enabled=true "
-    depends_on:
-      #- database
-      - cockroachdb
-      - zipkin
+      - permify-data:/var/lib/postgresql/data
     networks:
       - permify_net
 
@@ -53,12 +22,37 @@ services:
     networks:
       - permify_net
 
-  
-
-  
-
+  permify:
+    image: permify/permify
+    ports:
+      - "3476:3476"
+      - "3478:3478"
+    command: "serve --database-auto-migrate=true --database-engine=postgres --database-uri=postgres://root:root@cockroachdb:26257/permify --tracer-exporter=zipkin --tracer-endpoint=http://zipkin:9411/api/v2/spans --tracer-enabled=true "
+    depends_on:
+      - database
+      - zipkin
+    networks:
+      - permify_net
 networks:
   permify_net:
 
 volumes:
   permify-data:
+
+
+
+  #command: "serve --database-engine=postgres --database-uri=postgres://permify:permify@database:5432/permify --tracer-exporter=zipkin --tracer-endpoint=http://zipkin:9411/api/v2/spans --tracer-enabled=true"
+
+  # cockroachdb:
+  #   image: cockroachdb/cockroach:v21.1.10
+  #   hostname: cockroachdb
+  #   restart: always
+  #   ports:
+  #     - "26257:26257"
+  #     - "8080:8080"
+  #   volumes:
+  #     - ./cockroach-data:/cockroach/cockroach-data
+  #   command: start-single-node --insecure
+
+  #   networks:
+  #       - permify_net
