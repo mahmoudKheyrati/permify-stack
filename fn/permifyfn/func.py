@@ -35,7 +35,7 @@ def handler(ctx, data: io.BytesIO = None):
         span_name='create-schema',
         transport_handler=some_handler,
         port=42,
-        sample_rate=100.0,  # 100% of the requests will be traced
+        sample_rate=80.0,  # 100% of the requests will be traced
     ):
         name = "World"
         try:
@@ -58,7 +58,7 @@ def handler(ctx, data: io.BytesIO = None):
         api_data = api_response.json()
 
         return response.Response(
-            ctx, 
+            ctx,
             response_data=json.dumps({
                 "message": "Hello {0}".format(name),
                 "api_response": api_data  # Include the API response in the function's output
