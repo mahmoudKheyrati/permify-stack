@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: permify
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: permify
+  template:
+    metadata:
+      labels:
+        app: permify
+    spec:
+      containers:
+        - name: permify1
+          image: mahmoudreza/permify1
+          args:
+            - "serve --http-port 3476 --grpc-port 3478 --distributed-enabled=true --distributed-node=192.168.43.2:7947 --distributed-node-name=permify2 --distributed-protocol=serf"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: permify
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: permify
+  template:
+    metadata:
+      labels:
+        app: permify
+    spec:
+      containers:
+        - name: permify2
+          image: mahmoudreza/permify2
+          args:
+            - "serve --http-port 3476 --grpc-port 3479 --distributed-enabled=true --distributed-node=192.168.43.2:7947 --distributed-node-name=permify2 --distributed-protocol=serf"
+
+#---
+## First Service
+#apiVersion: v1
+#kind: Service
+#metadata:
+#  name: permify-service
+#spec:
+#  type: NodePort
+#  selector:
+#    app: my-first-app
+#  ports:
+#    - protocol: TCP
+#      port: 80
+#      targetPort: 8080
+#      nodePort: 30080

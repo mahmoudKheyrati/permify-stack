@@ -17,7 +17,7 @@ class HttpTransport(BaseTransportHandler):
     def send(self, encoded_span):
         # The collector expects a thrift-encoded list of spans.
         response = requests.post(
-            'http://192.168.43.67:9411/api/v2/spans',
+            'http://192.168.43.2:9411/api/v2/spans',
             data=encoded_span,
             headers={'Content-Type': 'application/x-thrift'},
         )
@@ -52,7 +52,7 @@ def handler(ctx, data: io.BytesIO = None):
         }
 
         # Send a POST request to an external API
-        api_response = requests.post('http://192.168.43.67:3476/v1/tenants/t1/schemas/write', json=post_data)
+        api_response = requests.post('http://192.168.43.2:3476/v1/tenants/t2/schemas/write', json=post_data)
 
         # Parse the API response as JSON
         api_data = api_response.json()
