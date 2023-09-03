@@ -57,11 +57,63 @@ def handler(ctx, data: io.BytesIO = None):
         # Parse the API response as JSON
         api_data = api_response.json()
 
+        schema_version = api_data["schema_version"]
+
+         # Prepare the data for the POST request
+        post_data = {
+    "tenant_id": "t2",
+    "metadata": {
+        "schema_version": schema_version
+    },
+    "tuples": [
+        {
+            "entity": {
+                "type": "post",
+                "id": "p1"
+            },
+            "relation": "owner",
+            "subject": {
+                "type": "user",
+                "id": "u1",
+                "relation": ""
+            }
+        }
+    ]
+}
+
+        # Send a POST request to an external API
+        api_response = requests.post('http://192.168.43.2:3476/v1/tenants/t2/relationships/write', json=post_data)
+
+
+
+        post_data = {
+    "tenant_id": "t2",
+    "metadata": {
+        "schema_version": schema_version,
+        "depth": 100
+    },
+    "entity": {
+        "type": "post",
+        "id": "p1"
+    },
+    "permission": "view_post",
+    "subject": {
+        "type": "user",
+        "id": "u1"
+    }
+}
+        # Send a POST request to an external API
+        api_response = requests.post('http://192.168.43.2:3476/v1/tenants/t2/permissions/check', json=post_data)
+        print(api_response.json())
+
+
+
+
+
         return response.Response(
             ctx, 
             response_data=json.dumps({
-                "message": "Hello {0}".format(name),
-                "api_response": api_data  # Include the API response in the function's output
+                "api_response": api_response.json() 
             }),
             headers={"Content-Type": "application/json"}
         )
